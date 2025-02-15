@@ -1,0 +1,177 @@
+import java.util.Scanner;
+
+    public static void main(String[] args) {
+
+        new Account();
+        Checking newChecking = new Checking(0);
+        Savings newSavings = new Savings(500);
+
+        Scanner input = new Scanner(System.in);
+        int choice;
+        System.out.println("[Banking System]");
+        do {
+            System.out.println("\n1. Withdraw from Checking");
+            System.out.println("2. Withdraw from Savings");
+            System.out.println("3. Deposit to Checking");
+            System.out.println("4. Deposit to Savings");
+            System.out.println("5. Balance of Checking");
+            System.out.println("6. Balance of Savings");
+            System.out.println("7. Award Interest to Savings");
+            System.out.println("8. Quit");
+            System.out.print("Select option: ");
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("How much would you like to withdraw from Checking? $");
+                    int Checking_amount = input.nextInt();
+                    Checking.withdraw(Checking_amount);
+                    System.out.println("Current balance of Checking is $" + Checking.accountBalance);
+                case 2:
+                    System.out.println("How much would you like to withdraw from Savings? $");
+                    int Savings_amount = input.nextInt();
+                    Savings.withdraw(Savings_amount);
+                    System.out.println("Current balance of Savings is $" + Savings.accountBalance);
+                    break;
+                case 3:
+                    System.out.println("How much would you like to deposit to Checking? $");
+                    int Checking_deposit = input.nextInt();
+                    Checking.deposit(Checking_deposit);
+                    System.out.println("Current balance of Checking is $" + Checking.accountBalance);
+                    break;
+                case 4:
+                    System.out.println("How much would you like to deposit to Savings? $");
+                    int Savings_deposit = input.nextInt();
+                    Savings.deposit(Savings_deposit);
+                    System.out.println("Current balance of Savings is $" + Savings.accountBalance);
+                    break;
+                case 5:
+                    newChecking.toString();
+                    break;
+                case 6:
+                    newSavings.toString();
+                    break;
+                case 7:
+                    Savings.addInterest();
+                    break;
+                case 8:
+                    System.out.println("Shutting off...");
+                    break;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        } while (choice != 8);
+    }
+
+
+public class Account {
+    public static int accountNumber;
+    public static int nextNumber = 10001;
+    public static double accountBalance;
+    public Account()
+    {
+        accountNumber = 1 + nextNumber;
+        accountBalance = 0;
+    }
+    public Account(double input)
+    {
+        accountNumber = 1 + nextNumber;
+        accountBalance += input;
+    }
+    public static double withdraw(double remove_input)
+    {
+        accountBalance -= remove_input;
+        return accountBalance;
+    }
+    public static double deposit(double deposit_input)
+    {
+        accountBalance += deposit_input;
+        return accountBalance;
+    }
+    public static double getAccountBalance()
+    {
+        return accountBalance;
+    }
+    public static double getAccountNumber()
+    {
+        return accountNumber;
+    }
+
+    public String toString()
+    {
+        return ("Account #" + getAccountNumber() + ", balance $" + getAccountBalance());
+    }
+}
+
+
+
+
+
+public class Checking extends Account {
+ public Checking(double initialDeposit)
+ {
+     super(initialDeposit);
+ }
+
+ public static double withdraw(double amount)
+ {
+     double newBalance = Account.withdraw(amount);
+     if (newBalance < 0) {
+         System.out.println("Charging an overdraft fee of $20 because account is below $0");
+         newBalance -= 20;
+     }
+     System.out.print("Current balance of checking is " + newBalance);
+     return newBalance;
+ }
+    @Override
+    public String toString()
+ {
+     return (STR."Checking Account #\{Checking.getAccountNumber()}, balance $\{Checking.getAccountBalance()}");
+ }
+}
+
+
+public class Savings extends Account{
+    private static int numberOfDeposits;
+    public Savings(double balance)
+    {
+        super(balance);
+        this.numberOfDeposits = 0;
+    }
+
+    public static double withdraw(double amount)
+    {
+        double newBalance = Account.withdraw(amount);
+        if (newBalance < 500.0)
+        {
+            System.out.println("Charging a fee of $10.0 because you are below $500" );
+            newBalance = Account.withdraw(10);
+        }
+        return newBalance;
+    }
+
+    public static double deposit(double amount)
+    {
+        double newBalance = Account.deposit(amount);
+        numberOfDeposits += 1;
+        System.out.println("This is deposit " + numberOfDeposits + " to this account");
+        if (numberOfDeposits > 5)
+        {
+            System.out.println("Charging a fee of $10");
+            newBalance -= 10;
+        }
+        return newBalance;
+    }
+    public static double addInterest()
+    {
+        double interest = Account.getAccountBalance() * 0.015;
+        System.out.println("Customer has earned $" + interest + " in interest" );
+        return interest + accountBalance;
+    }
+    @Override
+    public String toString()
+    {
+        return ("Savings Account #" + Savings.getAccountNumber() + ", balance $" + Savings.getAccountBalance());
+    }
+}
